@@ -13,12 +13,12 @@ public class Leaderboard : MonoBehaviour
     /// Получение списка лидиров
     /// </summary>
     /// <returns>Список лидеров</returns>
-    public List<Leader> GetList()
+    public List<Player> GetList()
     {
-        List<Leader> listLeaders = new List<Leader>();
+        List<Player> listLeaders = new List<Player>();
         for(int i = 0; i < 10; i++)
         {
-            Leader leader = new Leader(); //Экземпляр структуры
+            Player leader = new Player(); //Экземпляр структуры
 
             //Получение лидеров по ключу Leader(номер_позиции)
             leader.Nickname += PlayerPrefs.GetString(keyLeaderNickname + (i + 1));
@@ -29,10 +29,29 @@ public class Leaderboard : MonoBehaviour
 
         return listLeaders;
     }
+
+    /// <summary>
+    /// Сохранить игрока в списках лидеров
+    /// </summary>
+    /// <param name="player">Информация об игроке</param>
+    public void SaveLeader(Player player)
+    {
+        //Получение списка лидеров
+        List<Player> leaders = GetList();
+
+        for(int i = 0; i < leaders.Count; i++)
+        {
+            if(leaders[i].Score < player.Score)
+            {
+                leaders[i].Nickname = player.Nickname;
+                leaders[i].Score = player.Score;
+            }
+        }
+    }
 }
 
-//Структура лидера
-public struct Leader
+//Класс игрока
+public class Player
 {
     public string Nickname; //Никнейм лидера
     public int Score; //Счёт лидера
